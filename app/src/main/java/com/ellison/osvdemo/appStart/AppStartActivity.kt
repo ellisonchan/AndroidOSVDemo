@@ -5,7 +5,8 @@ package com.ellison.osvdemo.appStart
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.ellison.osvdemo.common.printApplicationStartInfo
+ import com.ellison.osvdemo.common.TAG_APP_START
+ import com.ellison.osvdemo.common.printApplicationStartInfo
 import com.ellison.osvdemo.databinding.ScreenTouchBinding
 import java.util.concurrent.Executors
 import java.util.function.Consumer
@@ -14,7 +15,7 @@ class AppStartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(
-            "AppStart", "AppStartActivity#onCreate()"
+            TAG_APP_START, "AppStartActivity#onCreate()"
         )
 
         val activityManager = getSystemService(ActivityManager::class.java)
@@ -24,21 +25,21 @@ class AppStartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnA.setOnClickListener {
-            Log.d("AppStart", "button A tapped")
+            Log.d(TAG_APP_START, "button A tapped")
         }
 
         binding.btnA.setOnLongClickListener() {
-            Log.d("AppStart", "button A tapped")
+            Log.d(TAG_APP_START, "button A tapped")
 
             return@setOnLongClickListener true
         }
 
         binding.btnB.setOnClickListener {
-            Log.d("AppStart", "button B tapped")
+            Log.d(TAG_APP_START, "button B tapped")
         }
 
         val applicationStartConsumer = Consumer<ApplicationStartInfo> {
-            Log.d("AppStart", "changed applicationStartInfo:${it.printApplicationStartInfo()}")
+            Log.d(TAG_APP_START, "changed applicationStartInfo:${it.printApplicationStartInfo()}")
         }
 
         activityManager.addApplicationStartInfoCompletionListener(

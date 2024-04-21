@@ -2,6 +2,77 @@
 
 ## Scope for Android 15
 
+### 1. ApplicationStartInfo
+
+<https://github.com/ellisonchan/AndroidOSVDemo/tree/main/app/src/main/java/com/ellison/osvdemo/appStart/AppStartActivity.kt>
+
+Output following info contents according to `ApplicationStartInfo` API.
+
+```bash
+ 03-30 20:46:27.461  4499  4499 D AppStart: OSVApplication#onCreate()
+ 03-30 20:46:27.477  4499  4499 D AppStart: Original applicationStartInfo list:
+ 03-30 20:46:27.484  4499  4499 D AppStart: ApplicationStartInfo{intent:Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.ellison.demo/.appStart.AppStartActivity } launchMode:0 packageUid:10197 realUid:10197 pid:0 processName:com.ellison.demo reason:6  startType:1 startupState:0 startupTimestamps:{0=56169205650, 3=56491075233} wasForceStopped:false}
+ ​
+ 03-30 20:46:27.638  4499  4499 D AppStart: AppStartActivity#onCreate()
+ 03-30 20:46:27.961  4499  4563 D AppStart: ApplicationStartInfo{intent:Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.ellison.demo/.appStart.AppStartActivity } launchMode:0 packageUid:10197 realUid:10197 pid:0 processName:com.ellison.demo reason:6  startType:1 startupState:2 startupTimestamps:{0=56169205650, 3=56491075233} wasForceStopped:false}
+```
+
+### 2. ProfilingManager
+
+<https://github.com/ellisonchan/AndroidOSVDemo/tree/main/app/src/main/java/com/ellison/osvdemo/profiling/ProfilingActivity.kt>
+
+Request dumping java heap from codes by `ProfilingManager`.
+
+```kotlin
+class ProfilingActivity : AppCompatActivity() {
+    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
+
+    private val profilingResultConsumer = Consumer<ProfilingResult> {
+        Log.d(TAG_PROFILING, "accept profilingResult:${it.printProfilingResult()}")
+    }
+
+    private val profilingManager by lazy {
+        getSystemService(ProfilingManager::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        binding.dump.setOnClickListener {
+            Log.d(TAG_PROFILING, "button dump tapped")
+
+            profilingManager.registerForAllProfilingResults(
+                singleThreadExecutor,
+                profilingResultConsumer
+            )
+        }
+
+        binding.request.setOnClickListener {
+            Log.d(TAG_PROFILING, "button request tapped")
+
+            profilingManager.requestProfiling(
+                // ProfilingManager.PROFILING_TYPE_SYSTEM_TRACE,
+                // ProfilingManager.PROFILING_TYPE_JAVA_HEAP_DUMP,
+                ProfilingManager.PROFILING_TYPE_STACK_SAMPLING,
+                // ProfilingManager.PROFILING_TYPE_HEAP_PROFILE,
+                null,
+                // null,
+                "TEST_FOR_PROFILING_MANAGER",
+                null,
+                singleThreadExecutor,
+                profilingResultConsumer
+            )
+        }
+        ...
+    }
+}
+```
+
+And output ProfilingResult as below:
+
+```bash
+04-21 19:37:32.220  7184  7270 D Profiling: accept profilingResult:ProfilingResult{errorCode:0 errorMessage:null resultFilePath:/data/user/0/com.ellison.osvdemo/files/profiling/profile_testforprofilingmana_2024-04-21-19-37-26.perfetto-java-heap-dump tag:TEST_FOR_PROFILING_MANAGER}
+```
+
 ## Scope for Android 14
 
 > **Warning**
