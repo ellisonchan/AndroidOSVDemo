@@ -2,4 +2,8 @@
     <string name="app_name" translatable="false">TextViewHighlightsDemo</string>
     <string name="app_name_2" translatable="false">Android U</string>
     <string name="example_string">You are subscribed to our store service</string>
+    <string name="accessibilityName" translatable="false">Scroll assistant</string>
+    <string name="description" translatable="false">
+        Support scroll action.
+    </string>
 </resources>

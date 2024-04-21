@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "TextViewHighlightsDemo"
+rootProject.name = "AndroidOSVDemo"
 include ':app'
